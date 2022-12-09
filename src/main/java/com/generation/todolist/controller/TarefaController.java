@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/tarefas")
@@ -38,5 +39,11 @@ public class TarefaController {
                 })
                .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Tarefa>> findAll() {
+        return ResponseEntity.ok(tarefaRepository.findAll());
+    }
+
 
 }

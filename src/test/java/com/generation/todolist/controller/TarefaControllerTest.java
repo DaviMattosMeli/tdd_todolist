@@ -81,11 +81,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
         ResponseEntity<String> resposta = testRestTemplate
                 // na rota pode passar qualquer ID para teste. Ele procura o ID no que já foi salvo para testar
-                .exchange("/tarefas/2",  HttpMethod.DELETE, null, String.class);
+                .exchange("/tarefas/2", HttpMethod.DELETE, null, String.class);
 
-                assertEquals(HttpStatus.NO_CONTENT, resposta.getStatusCode());
-
-    }
+        assertEquals(HttpStatus.NO_CONTENT, resposta.getStatusCode());
 
     }
+
+    @Test
+    @DisplayName("Buscar todas as tarefas")
+    public void buscarTodasTarefas() {
+        tarefaRepository.save(new Tarefa(0L, "Tarefa 02", "Tarefa numero 2",
+                "Maria", LocalDate.now(), true));
+        tarefaRepository.save(new Tarefa(0L, "Tarefa 03", "Tarefa numero 3",
+                "Joana", LocalDate.now(), true));
+
+        ResponseEntity<String> resposta = testRestTemplate
+                .exchange("/tarefas/all", HttpMethod.GET, null, String.class);
+
+        assertEquals(HttpStatus.OK, resposta.getStatusCode());
+    }
+
+}
 
