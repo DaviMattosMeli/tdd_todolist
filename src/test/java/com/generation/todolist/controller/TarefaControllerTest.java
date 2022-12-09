@@ -100,14 +100,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
     @Test
     @DisplayName("Listar todas as Tarefas que contém um Nome Específica")
     public void deveListarTodasAsTarefasComNomeEspecífico() {
-
         tarefaRepository.save(new Tarefa(0L, "Tarefa 04", "Tarefa numero 4", "Maria", LocalDate.now(), true));
-
         ResponseEntity<String> resposta = testRestTemplate
                 .exchange("/tarefas/nome/Tarefa 04", HttpMethod.GET, null, String.class);
-
         assertEquals(HttpStatus.OK, resposta.getStatusCode());
-
     }
 
     @Test
@@ -121,6 +117,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         HttpEntity<Tarefa> corpoRequisicao = new HttpEntity<Tarefa>(tarefaUpdate);
 
         ResponseEntity<Tarefa> corpoResposta = testRestTemplate
+                .withBasicAuth("root", "root")
                 .exchange("/tarefas", HttpMethod.PUT, corpoRequisicao, Tarefa.class);
 
         assertEquals(HttpStatus.OK, corpoResposta.getStatusCode());

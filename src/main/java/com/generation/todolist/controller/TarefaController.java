@@ -49,14 +49,15 @@ public class TarefaController {
         return ResponseEntity.ok(tarefaRepository.findAll());
     }
 
+
     @GetMapping("/nome/{nome}")
-    public ResponseEntity<List<Tarefa>> getAll(@PathVariable String nome) {
-        if (tarefaRepository.findAllByNomeContainingIgnoreCase(nome).isEmpty())
-
+    public ResponseEntity<List<Tarefa>> getByNome(@PathVariable String nome) {
+        List<Tarefa> tarefas = tarefaRepository.findAllByNomeContainingIgnoreCase(nome);
+        if (tarefas.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
         return ResponseEntity.ok(tarefaRepository.findAllByNomeContainingIgnoreCase(nome));
     }
+
 
     @PutMapping
     public ResponseEntity<Tarefa> putTarefa(@Valid @RequestBody Tarefa tarefa) {
