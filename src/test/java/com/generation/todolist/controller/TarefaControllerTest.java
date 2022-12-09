@@ -98,19 +98,33 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
     }
 
     @Test
-    @DisplayName("Buscar tarefa por Nome")
-    public void buscarTarefaPorNome() {
+    @DisplayName("Listar todas as Tarefas que contém um Nome Específica")
+    public void deveListarTodasAsTarefasComNomeEspecífico() {
 
-        Tarefa tarefa = new Tarefa(0L, "Buscar Tarefa", "Tarefa numero 1", "João", LocalDate.now(), true);
+        tarefaRepository.save(new Tarefa(0L, "Tarefa 04", "Tarefa numero 4", "Maria", LocalDate.now(), true));
 
-        HttpEntity<Tarefa> corpoRequisicao = new HttpEntity<Tarefa>(tarefa);
-
-        ResponseEntity<Tarefa> resposta = testRestTemplate
-                .exchange("/tarefas/nome/Tarefa", HttpMethod.GET, corpoRequisicao, Tarefa.class);
+        ResponseEntity<String> resposta = testRestTemplate
+                .exchange("/tarefas/nome/Tarefa 04", HttpMethod.GET, null, String.class);
 
         assertEquals(HttpStatus.OK, resposta.getStatusCode());
-        assertEquals(corpoRequisicao.getBody().getNome(), resposta.getBody().getNome());
 
+    }
+
+    @Test
+    @DisplayName("Atualizar uma Tarefa Específica")
+    public void deveAtualizarUmaTarefa() {
+
+        Tarefa buscaTarefa = tarefaRepository.save(new Tarefa(0L, "Tarefa 05", "Tarefa numero 5", "Carlos", LocalDate.now(), true));
+
+        Tarefa tarefaUpdate = tarefaRepository.save(new Tarefa(buscaTarefa.getId(), "Tarefa 05 - Atualizada!", "Tarefa numero 5 - Atualizada!", "José", LocalDate.now(), true));
+
+        HttpEntity<Tarefa> corpoRequisicao = new HttpEntity<Tarefa>(tarefaUpdate);
+
+        ResponseEntity<Tarefa> corpoResposta = testRestTemplate
+                .exchange("/tarefas", HttpMethod.PUT, corpoRequisicao, Tarefa.class);
+
+        assertEquals(HttpStatus.OK, corpoResposta.getStatusCode());
+        assertEquals(corpoRequisicao.getBody().getNome(), corpoResposta.getBody().getNome());
 
     }
 

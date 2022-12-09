@@ -58,5 +58,14 @@ public class TarefaController {
         return ResponseEntity.ok(tarefaRepository.findAllByNomeContainingIgnoreCase(nome));
     }
 
+    @PutMapping
+    public ResponseEntity<Tarefa> putTarefa(@Valid @RequestBody Tarefa tarefa) {
+
+        return tarefaRepository.findById(tarefa.getId()).map(resposta ->
+                        ResponseEntity.ok().body(tarefaRepository.save(tarefa)))
+                .orElse(ResponseEntity.notFound().build());
+
+    }
+
 
 }
