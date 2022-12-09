@@ -42,7 +42,20 @@ public class TarefaController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Tarefa>> findAll() {
+        if (tarefaRepository.findAll().isEmpty())
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
         return ResponseEntity.ok(tarefaRepository.findAll());
+    }
+
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<List<Tarefa>> getAll(@PathVariable String nome) {
+        if (tarefaRepository.findAllByNomeContainingIgnoreCase(nome).isEmpty())
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        return ResponseEntity.ok(tarefaRepository.findAllByNomeContainingIgnoreCase(nome));
     }
 
 

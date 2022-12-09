@@ -90,15 +90,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
     @Test
     @DisplayName("Buscar todas as tarefas")
     public void buscarTodasTarefas() {
-        tarefaRepository.save(new Tarefa(0L, "Tarefa 02", "Tarefa numero 2",
-                "Maria", LocalDate.now(), true));
-        tarefaRepository.save(new Tarefa(0L, "Tarefa 03", "Tarefa numero 3",
-                "Joana", LocalDate.now(), true));
 
         ResponseEntity<String> resposta = testRestTemplate
                 .exchange("/tarefas/all", HttpMethod.GET, null, String.class);
 
         assertEquals(HttpStatus.OK, resposta.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Buscar tarefa por Nome")
+    public void buscarTarefaPorNome() {
+
+        Tarefa tarefa = new Tarefa(0L, "Buscar Tarefa", "Tarefa numero 1", "João", LocalDate.now(), true);
+
+        HttpEntity<Tarefa> corpoRequisicao = new HttpEntity<Tarefa>(tarefa);
+
+        ResponseEntity<Tarefa> resposta = testRestTemplate
+                .exchange("/tarefas/nome/Tarefa", HttpMethod.GET, corpoRequisicao, Tarefa.class);
+
+        assertEquals(HttpStatus.OK, resposta.getStatusCode());
+        assertEquals(corpoRequisicao.getBody().getNome(), resposta.getBody().getNome());
+
+
     }
 
 }
